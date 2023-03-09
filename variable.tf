@@ -16,6 +16,13 @@ variable "environment" {
   default     = "dev"
 }
 
+#This application varient is used to contribute in dynamic naming convention only
+variable "application" {
+  description = "Name of the application"
+  type        = string
+  default     = "dev-01"
+}
+
 variable "project" {
   description = "Name of the project"
   type        = string
