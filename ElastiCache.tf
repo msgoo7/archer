@@ -42,6 +42,13 @@ resource "aws_elasticache_replication_group" "dev_cluster_replication_group" {
       log_type         = "engine-log"
     }
 
+  log_delivery_configuration {
+      destination      = aws_cloudwatch_log_group.cacle_logs_slow.name
+      destination_type = "cloudwatch-logs"
+      log_format       = "json"
+      log_type         = "slow-log"
+    }
+
   tags = merge(
     var.tags,
     tomap({
@@ -54,5 +61,10 @@ resource "aws_elasticache_replication_group" "dev_cluster_replication_group" {
 
 resource "aws_cloudwatch_log_group" "cacle_logs" {
   name              = "/aws/${var.application}-${var.environment}"
+  retention_in_days = var.logs_retention_in_days
+}
+
+resource "aws_cloudwatch_log_group" "cacle_logs_slow" {
+  name              = "/aws/${var.application}-${var.environment}-slow"
   retention_in_days = var.logs_retention_in_days
 }
