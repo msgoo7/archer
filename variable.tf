@@ -38,6 +38,19 @@ variable "tags" {
   }
 }
 
+variable "subnet_ids" {
+  description = "Subnet list to create Subnet group"
+  type        = list
+  default = [[
+    "subnet-0e114dbee943d87fc",
+    "subnet-0a44dc2ea5fe1fd39",
+    "subnet-0e14f9bd5a7df05ee",
+    "subnet-071b100eda39a47bb",
+    "subnet-0c440a8bf360a0543",
+    "subnet-027a522dcaac57f4c"
+  ]]
+}
+
 variable "subnet1" {
   description = "subnets"
   type        = string
@@ -134,3 +147,10 @@ variable "sg_id" {
   type        = string
   default     = "sg-007ec033e4cd43780"
 }
+
+variable "logs_retention_in_days" {
+  type        = number
+  default     = 90
+  description = "Specifies the number of days you want to retain log events"
+}
+

@@ -1,6 +1,8 @@
 resource "aws_elasticache_subnet_group" "dev-cache-subnet-group" {
   name       = "${var.environment}-${var.region}-${var.application}-subnet-group"
-  subnet_ids = [var.subnet1, var.subnet2, var.subnet3, var.subnet4, var.subnet5, var.subnet6]
+#  subnet_ids = [var.subnet1, var.subnet2, var.subnet3, var.subnet4, var.subnet5, var.subnet6]
+#  count = length(var.subnet_ids)
+  subnet_ids = var.subnet_ids[0]
 
   tags = merge(
     var.tags,
@@ -33,6 +35,13 @@ resource "aws_elasticache_replication_group" "dev_cluster_replication_group" {
     num_node_groups         = "${var.nodes}"
   }
 
+  log_delivery_configuration {
+      destination      = aws_cloudwatch_log_group.cacle_logs.name
+      destination_type = "cloudwatch-logs"
+      log_format       = "json"
+      log_type         = "engine-log"
+    }
+
   tags = merge(
     var.tags,
     tomap({
@@ -41,4 +50,9 @@ resource "aws_elasticache_replication_group" "dev_cluster_replication_group" {
     })
   )
 
+}
+
+resource "aws_cloudwatch_log_group" "cacle_logs" {
+  name              = "/aws/${var.application}-${var.environment}"
+  retention_in_days = var.logs_retention_in_days
 }
